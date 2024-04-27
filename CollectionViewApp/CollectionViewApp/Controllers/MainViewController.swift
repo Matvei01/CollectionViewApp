@@ -10,18 +10,23 @@ import UIKit
 // MARK: - MainViewController
 final class MainViewController: UIViewController {
 
+    let persons = Person.getPerson()
+    
     // MARK: - UI Elements
     private lazy var mainCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 30
         layout.minimumInteritemSpacing = 0
+        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 30)
         
         let collectionView = UICollectionView(
             frame: view.frame,
             collectionViewLayout: layout
         )
         
+        collectionView.register(CustomViewCell.self, forCellWithReuseIdentifier: CustomViewCell.reuseID)
         collectionView.dataSource = self
         return collectionView
     }()
@@ -30,18 +35,25 @@ final class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        view.addSubview(mainCollectionView)
     }
 }
 
 extension MainViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        <#code#>
+        persons.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        <#code#>
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CustomViewCell.reuseID, for: indexPath)
+        guard let cell = cell as? CustomViewCell else {
+            return UICollectionViewCell()
+        }
+        
+        let person = persons[indexPath.item]
+        
+        cell.configure(with: person)
+        return cell
     }
-    
-    
 }
 
