@@ -9,7 +9,8 @@ import UIKit
 
 // MARK: - MainViewController
 final class MainViewController: UIViewController {
-
+    
+    // MARK: - Private Properties
     let persons = Person.getPerson()
     
     // MARK: - UI Elements
@@ -25,9 +26,9 @@ final class MainViewController: UIViewController {
             frame: view.frame,
             collectionViewLayout: layout
         )
-        
         collectionView.register(CustomViewCell.self, forCellWithReuseIdentifier: CustomViewCell.reuseID)
         collectionView.dataSource = self
+        collectionView.showsVerticalScrollIndicator = false
         return collectionView
     }()
     
@@ -39,13 +40,20 @@ final class MainViewController: UIViewController {
     }
 }
 
+// MARK: - UICollectionViewDataSource
 extension MainViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
         persons.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CustomViewCell.reuseID, for: indexPath)
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: CustomViewCell.reuseID,
+            for: indexPath
+        )
         guard let cell = cell as? CustomViewCell else {
             return UICollectionViewCell()
         }
